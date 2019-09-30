@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<!-- saved from url=(0077)https://cdpn.io/hexagoncircle/fullembedgrid/OJLxWKq?type=embed&animations=run -->
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+    <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">
+    <title>Follow the COC</title>
+    <link href="./css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./reset.min.css">
+    <link rel="stylesheet" href="./splitting.css">
+    <link rel="stylesheet" href="./content.css">
+	
+	
+	<script type="text/javascript" src="./jquery-3.4.1.js"></script>
+	
+    <script>
+		window.console = window.console || function(t) {};
+
+		makeRandomNoDup = function(s, e) {
+			let numbers = [];
+			let pickNumbers = e;
+			let insertCur = s;
+			let size = e - s;
+			 
+			for(insertCur; insertCur < pickNumbers ; insertCur++){
+				numbers[insertCur] = Math.floor(Math.random() * size);
+
+				for(searchCur = 0; searchCur < insertCur; searchCur ++){
+					if(numbers[insertCur] == numbers[searchCur]){
+						insertCur--;
+						break;
+					}
+				}
+			}
+			console.log(numbers);
+			return numbers;
+		};
+		
+		getQNo = function() {
+			return makeRandomNoDup(0,20);
+		};
+		
+		getANo = function() {
+			return makeRandomNoDup(0,20);
+		};
+
+
+		
+		
+		
+		$(function() {
+		
+			var qnos = getQNo();
+			//getAnswerSeq();
+		
+			$(document).keyup(function(event) { 
+				if (event.keyCode == '38') {		// key up
+					//event.preventDefault();
+					//location.reload();
+					console.log('시작');
+					
+					//var p = JSON.stringify(qnos);
+					//console.log(p);
+					//location.href="./index1.html?a=" + qnos;
+					location.href="./index.html";
+				}
+			});
+		
+
+			var div = document.createElement('div');
+			div.style = "position:absolute; top: 0; left: 0; text-align:center; color:#fff; width:100vw; height:100vh; background-color:#111; z-index:9999; font-size:2em; line-height: 32em;";
+			div.innerHTML = "축하합니다. 중립러들을 물리쳤습니다. 기어를 위(-)로 올리면 처음으로 돌아갑니다.";
+			$("body").append(div);
+
+
+			//addQuestion();
+   
+		});
+
+		
+    </script>
+    
+  </head>
+
+  <body translate="no">
+    <h1>행동강령을 준수하십시오.</h1>
+    <p class="action-tip">차별발언 발견 즉시 3초이내에 기어를 당겨 중립<span>러</span>들을 반박하세요.</p>
+
+	<div id='main'>시작하시려면 중립기어 기어박스를 위로 밀어 주세요~~</div>
+
+
+
+  <script src="./stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+  <script src="./splitting.min.js"></script>
+  <script id="rendered-js">
+        Splitting();
+      </script>
+  <script src="./css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a75406858d92924b4938bf.js"></script>
+
+	
+  </body>
+</html>

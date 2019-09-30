@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)https://cdpn.io/hexagoncircle/fullembedgrid/OJLxWKq?type=embed&animations=run -->
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+    <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">
+    <title>Follow the COC</title>
+    <link href="./css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./reset.min.css">
+    <link rel="stylesheet" href="./splitting.css">
+    <link rel="stylesheet" href="./content.css">
+	
+	
+	<script type="text/javascript" src="./jquery-3.4.1.js"></script>
+    <script>
+		window.console = window.console || function(t) {};
+		
+		
+		
+		
+		
+		$(function() {
+		
+			
+			/*
+			questions 랜덤으로 출력한다
+			중립적인 말이면 레버를 당기던 안당기던 상관없음
+			빻은말이면 레버를 당기면 answers를 랜덤하게 출력, 안당기면 게임오버 메시지 출력하고 초기화
+			질문20개를 다 출력되면 축하합니다 메시지 출력
+			*/
+			
+			// ra 가 1이면 중립 0이면 빻
+			var questions = [
+				  {q:'우려하던 일이 일어났네요. ㄷㄷ LG**, **니즘은 안끼는 곳이 없네 ㅋㅋㅋㅋㅋ', ra:0}
+				, {q:'메시지2', ra:1}
+				, {q:'차별하자는 말이 아니라 차이를 인정하자는거죠. 생물학적 차이까지 무시하자는건 너무 억지죠. 힘들고 고된 일은 다 남자들한테 떠넘기는게 여자분들 아니었습니까?', ra:0}
+				, {q:'그러니까 지금부터는 행동강령을 지키자고요.', ra:1}
+				, {q:'메시지5', ra:1}
+				, {q:'메시지6-', ra:0}
+				, {q:'메시지7', ra:1}
+				, {q:'메시지8-', ra:0}
+				, {q:'메시지9', ra:1}
+				, {q:'메시지10-', ra:0}
+				, {q:'메시지11-', ra:0}
+				, {q:'메시지12-', ra:0}
+				, {q:'메시지13', ra:1}
+				, {q:'메시지14', ra:1}
+				, {q:'메시지15-', ra:0}
+				, {q:'메시지16-', ra:0}
+				, {q:'메시지17', ra:1}
+				, {q:'메시지18-', ra:0}
+				, {q:'메시지19-', ra:0}
+				, {q:'메시지20', ra:1}
+			];
+			
+			console.log('questions.length: ' + questions.length);
+
+			var answers = [
+				  '기울어진운동장에서기어를중립에두면어떻게될까요?'
+				, '차별주의자ㅇㅈ?'
+				, '말하기전에생각했나요?'
+				, '할많하않'
+				, '답변5'
+				, '답변6'
+				, '답변7'
+				, '답변8'
+				, '답변9'
+				, '답변10'
+			];
+		  
+			// class p0? 0~4까지 랜덤
+			// style top 은 50~800, left 는 80~1080 까지 랜덤
+			var pNo;
+			var styleTop = 750;		// top, left 범위는 조절이 필요하면 여기서 수정
+			var styleLeft = 1000;
+			//var qNo;
+			
+			var barTimer;
+			var curRa;
+			var counter = 1;
+			
+			getpNo = function() {
+				return makeRandomNoDup(0,4);
+			};
+			
+			getAnswerSeq = function() {
+				return makeRandomNoDup(0,20);
+			};
+			
+			
+			makeRandomNoDup = function(s, e) {
+				var numbers = [];
+				var pickNumbers = e;
+				var insertCur = s;
+				var size = e - s;
+				 
+				for(insertCur; insertCur < pickNumbers ; insertCur++){
+					numbers[insertCur] = Math.floor(Math.random() * size);
+
+					for(searchCur = 0; searchCur < insertCur; searchCur ++){
+						if(numbers[insertCur] == numbers[searchCur]){
+							insertCur--;
+							break;
+						}
+					}
+				}
+				console.log(numbers);
+				return numbers;
+			};
+			
+			addQuestion = function() {
+				if (barTimer != null) {
+					clearInterval(barTimer);
+				}
+				
+				var div = document.createElement('section');
+				var className = 'dontspeak-p' + ' p0' + pNo[Math.floor(Math.random() * 4)];
+
+				//div.className = className;
+
+				// 질문 항목 순번
+				//curRa = Math.floor(Math.random() * 20);
+				curRa = qNo[counter];
+				
+				var msg = questions[curRa].q;	// 질문 선택
+				
+				// 화면에 출력할 질문 div 생성
+				div.innerHTML = '<div class="screen-wrap"></div>'
+				+ '<div id="answer#" class="#" style="top:#px;left:#px;">'.replace("#", counter).replace("#", className).replace("#", Math.floor(Math.random() * styleTop) + 50).replace("#", Math.floor(Math.random() * styleLeft) + 80)
+				+ msg
+				+ '</div>';
+				
+				console.log(div.innerHTML);
+
+				$("#main").append(div);
+				
+				// 화면에 출력한 질문 갯수 카운터
+				counter++;
+				
+				// wait time to handle a COCbar ㅋㅋㅋ 바 이름이 씨오씨바
+				barTimer = setInterval(function() {
+					console.log('setInterval');
+					console.log('ra: '+questions[curRa].ra);
+					// 중립발언이면(ra 가 1) 중립발언으로 질문지우고 다음 질문 표시
+					if (questions[curRa].ra == 1) {
+						clearRow();
+						addQuestion();
+					}
+					// 중립발언이 아니면(ra 가 0) 게임오버 메시지 출력
+					else {
+						//alert('중립기어 실패');
+						console.log('중립기어 실패');
+						// div 로 실패 팝업
+						var div = document.createElement('div');
+						div.style = "text-align:center;color:#fff;";
+						div.innerHTML = "중립기어 실패";
+						$("body").append(div);
+						clearInterval(barTimer);
+						
+						setInterval(2000);	// 실패팝업출력후 2초 대기
+						//location.reload();	// 실패시 화면 리로딩 처리...실제 설치시에는 코멘트 해제처리...
+					}
+				}
+				, 3000);	// 질문에 대한 중립판단을 할 시간 딜레이
+			};
+			
+			addAnswer = function() {
+				var div = document.createElement('div');
+				var className = 'container';
+
+				div.className = className;
+				
+				//var aidx = answers[Math.floor(Math.random() * 10)];
+				
+				div.innerHTML = '<span data-splitting="" class="headline headline--yell words chars splitting">' + answers[Math.floor(Math.random() * 10)] + '</span>';
+				console.log('counter: '+"#answer"+counter);
+				$("#answer"+(counter-1)).append(div);
+				//alert(div.innerHTML);
+			};
+			
+			clearRow = function () {
+				$(".screen-wrap").remove();
+			};
+			
+			// 엔딩 메시지 출력
+			ending = function() {
+				/*var div = document.createElement('div');
+						div.style = "text-align:center;color:#fff;";
+						div.innerHTML = "축하합니다. 중립러들을 물리쳤습니다. 훗~~ 잠시 후 처음으로 돌아갑니다.";
+						$("body").append(div);*/
+				alert('end...');
+			};
+
+		
+			$(document).keyup(function(event) { 
+				if (event.keyCode == '40') { 	// 
+					event.preventDefault();
+					console.log('enter');
+					//clearInterval(barTimer); 
+					//clearRow();
+					//addQuestion();
+					// 중립발언 선별
+					if (questions[curRa].ra == 1) {
+						clearRow();
+					}
+					// 중립발언 아님 선별 성공
+					else {
+						console.log('중립발언 아님 선별 성공');
+						//clearRow();
+						clearInterval(barTimer);
+						addAnswer();
+						//console.log($(".dontspeak-p").html());
+					}
+					
+					//counter++;
+					
+					if (counter > questions.length - 1)
+						ending();
+					else {
+						console.log('counter: ' + counter);
+						setInterval(1000);
+						addQuestion();
+					}
+				}
+			});
+		
+			pNo = getpNo();
+			qNo = getAnswerSeq();
+
+			addQuestion();
+   
+		});
+
+		
+    </script>
+    
+  </head>
+
+  <body translate="no">
+    <h1>행동강령을 준수하십시오.</h1>
+    <p class="action-tip">차별발언 발견 즉시 3초이내에 기어를 당겨 중립<span>러</span>들을 반박하세요.</p>
+
+	<div id='main'></div>
+
+
+
+  <script src="./stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+  <script src="./splitting.min.js"></script>
+  <script id="rendered-js">
+        Splitting();
+      </script>
+  <script src="./css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a75406858d92924b4938bf.js"></script>
+
+	
+  </body>
+</html>
